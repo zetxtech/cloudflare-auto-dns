@@ -38,6 +38,7 @@ mkdir cloudflare-auto-dns
 cd cloudflare-auto-dns
 git clone https://github.com/zetxtech/cloudflare-auto-dns.git src
 mkdir data
+cp src/config.example.yml data/config.yml
 ```
 
 在 `cloudflare-auto-dns` 目录下创建 `docker-compose.yml`：
@@ -53,17 +54,72 @@ services:
       - ./cloudflare-auto-dns/data:/app
 ```
 
-接下来, 在 `cloudflare-auto-dns` 目录下运行以下命令：
+然后, 在 `cloudflare-auto-dns` 目录下, 根据文件内注释修改 `data/config.yml`. 然后运行以下命令：
 
 ```sh
 docker-compose up -d
 ```
 
-你可以通过以下命令查看日志：
+你可以在 `cloudflare-auto-dns` 目录下, 通过以下命令查看日志：
 
 ```sh
 docker-compose logs -f
 ```
+
+### 配置文件
+配置文件 `config.yml` 的格式如下：
+
+```yml
+debug: false
+cloudflare:
+  token: yourtoken
+interval: 60
+retries: 3
+records:
+- domain: yourdomain.com
+  subdomain: www
+  checks:
+    - type: web
+      target: https://www.yourdomain.com
+      timeout: 10
+      status: 200-299,401
+    - type: web
+      target: https://sub.yourdomain.com
+      regex: Success
+    - type: ping
+      target: www.yourdomain.com
+      percentage: 80
+    - type: tcping
+      timeout: 2
+  pool:
+    - type: CNAME
+      content: yourcdn.com
+      proxied: false
+```
+
+#### 配置项说明
+`cloudflare`:
+    `token`: Cloudflare API Token
+
+`debug`: 是否开启调试模式, 不开启时不显示测试成功的日志 (可选, 默认为 `false`)
+`interval`: 检查运行间隔时间 (秒) (可选, 默认为 `60`)
+`retries`: 几次检查失败后,进行切换 (可选, 默认为 `3`)
+
+`records`: DNS 记录配置列表:
+    `domain`: 域名
+    `subdomain`: 子域名, 可以包含或不包含域名, 也可以使用 '@'
+    `checks`: 检查配置列表, 可以包含三种类型的检查:
+        `type`: web / ping / tcping
+        `target`: 检查目标地址, 当为 web 检查时使用 URL, ping 和 tcping 时使用域名或 IP (可选, 默认为 `subdomain` 对应域名)
+        `status`: web 检查状态码范围, 例如可以为 200-299,401 (可选, 默认为 200-299)
+        `regex`: web 检查返回内容中必须包含正则表达式 (可选, 默认为不要求)
+        `percentage`: ping 检查 5 次发包丢包率必须低于该比率, 例如 80 表示允许丢 1 包 (可选, 默认为 `80`)
+        `port`: tcping 端口 (可选, 默认为 `80`)
+        `timeout`: tcping 检查超时时间 (可选, 默认为 `2`)
+`pool`: 可切换的 源 DNS 记录列表:
+    `type`: DNS 记录类型 (A / AAAA / CNAME)
+    `content`: DNS 记录内容
+    `proxied`: 是否开启 Cloudflare 代理 (可选, 默认为 `false`)
 
 ## 贡献
 
