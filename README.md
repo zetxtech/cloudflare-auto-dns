@@ -106,7 +106,7 @@ records:
  - `records`: DNS 记录配置列表:
     - `domain`: 域名
     - `subdomain`: 子域名, 可以包含或不包含域名, 也可以使用 '@'
-    - `checks`: 检查配置列表, 可以包含三种类型的检查:
+    - `checks`: 检查配置列表, 可以包含三种类型的检查 (所有检查全部通过才认为域名健康):
         - `type`: web / ping / tcping
         - `target`: 检查目标地址, 当为 web 检查时使用 URL, ping 和 tcping 时使用域名或 IP (可选, 默认为 `subdomain` 对应域名)
         - `status`: web 检查状态码范围, 例如可以为 200-299,401 (可选, 默认为 200-299)
