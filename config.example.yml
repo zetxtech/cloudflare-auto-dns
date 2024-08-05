@@ -1,7 +1,10 @@
+debug: false
 # 通过 Cloudflare -> 个人资料 -> API 令牌获取 (请至少开通 区域.DNS 权限)
 cloudflare:
   token: yourtoken
-
+# 检查间隔次数, 一定次数后将从源池中切换
+interval: 60
+retries: 3
 # 各个需要自动调整的站点
 records:
 - domain: yourdomain.com
@@ -17,7 +20,7 @@ records:
       regex: Success
     - type: ping
       target: www.yourdomain.com
-      max_latency: 2
+      percentage: 80
     - type: tcping
       timeout: 2
   # 可用的源池

@@ -1,5 +1,5 @@
 requests
 cloudflare>3
 pyyaml
-pythonping
 loguru
+schema

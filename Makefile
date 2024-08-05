@@ -1,6 +1,6 @@
 .RECIPEPREFIX := >
 .DEFAULT_GOAL := help
-.PHONY: help help/simple help/all install develop venv venv/clean python/venv conda/venv conda/install run lint test debugpy debugpy/api version version/patch version/minor version/major push clean clean/build clean/pyc clean/test
+.PHONY: help help/simple help/all install develop venv venv/clean python/venv conda/venv conda/install run lint test debugpy version version/patch version/minor version/major push clean clean/build clean/pyc clean/test
 
 USE_MIRROR ?= False
 
@@ -99,10 +99,8 @@ lint: venv
 test:
 >   "$(VENV)/bin/python" -m pytest
 
-debugpy: debugpy/cli
-
-debugpy/cli:
->   "$(VENV)/bin/python" -m debugpy --listen localhost:5678 --wait-for-client cli.py
+debugpy:
+>   "$(VENV)/bin/python" -m debugpy --listen localhost:5678 --wait-for-client monitor.py
 
 version: version/patch
 
