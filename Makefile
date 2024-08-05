@@ -13,7 +13,7 @@ else
 endif
 
 PYTHON ?= python
-PYTHON_COMPATIBLE := $(shell "$(PYTHON)" -c "import sys; print(sys.version_info >= (3, 8))" 2>/dev/null || echo False)
+PYTHON_COMPATIBLE := $(shell "$(PYTHON)" -c "import sys; print(sys.version_info >= (3, 9))" 2>/dev/null || echo False)
 CONDA_ROOT ?= conda
 VENV := venv
 
@@ -80,7 +80,7 @@ python/venv:
 >   @[ -d "$(VENV)" ] || "$(PYTHON)" -m venv "$(VENV)"
 
 conda/venv: conda/install
->   @[ -d "$(VENV)" ] || "$(CONDA_ROOT)/condabin/conda" create -y --prefix venv python~=3.8.0
+>   @[ -d "$(VENV)" ] || "$(CONDA_ROOT)/condabin/conda" create -y --prefix venv python~=3.9.0
 
 conda/install:
 >   @if [ ! -d "$(CONDA_ROOT)" ]; then \
