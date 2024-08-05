@@ -1,3 +1,5 @@
 requests
-CloudFlare
-PyYAML
+cloudflare>3
+pyyaml
+pythonping
+loguru

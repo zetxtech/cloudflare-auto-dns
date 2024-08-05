@@ -1,0 +1,5 @@
+black==23.3.0
+pytest
+debugpy
+pre-commit
+bump2version

@@ -1,0 +1,27 @@
+# 通过 Cloudflare -> 个人资料 -> API 令牌获取 (请至少开通 区域.DNS 权限)
+cloudflare:
+  token: yourtoken
+
+# 各个需要自动调整的站点
+records:
+- domain: yourdomain.com
+  subdomain: www
+  # 当以下检查任意一个不通过时, 从池中随机切换
+  checks:
+    - type: web
+      target: https://www.yourdomain.com
+      timeout: 10
+      status: 200-299,401
+    - type: web
+      target: https://sub.yourdomain.com
+      regex: Success
+    - type: ping
+      target: www.yourdomain.com
+      max_latency: 2
+    - type: tcping
+      timeout: 2
+  # 可用的源池
+  pool:
+    - type: CNAME
+      content: yourcdn.com
+      proxied: false
