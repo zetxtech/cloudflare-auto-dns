@@ -211,9 +211,9 @@ def check(name: str, check_config: dict):
 def check_web(target, timeout, status, regex):
     try:
         if regex:
-            resp = requests.get(target, timeout=timeout)
+            resp = requests.get(target, timeout=timeout, allow_redirects=True)
         else:
-            resp = requests.head(target, timeout=timeout)
+            resp = requests.head(target, timeout=timeout, allow_redirects=True)
     except Exception as e:
         logger.info(f"Test '{target}' failed due to: {e.__class__.__name__}: {e}.")
         return False
